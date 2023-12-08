@@ -16,6 +16,7 @@ class RabbitMQConnector:
         self.port = int(os.getenv("RABBITMQ_PORT"))
         self.username = os.getenv("RABBITMQ_USERNAME")
         self.password = os.getenv("RABBITMQ_PASSWORD")
+        self.queue_name = os.getenv("RABBITMQ_QUEUE_NAME")
 
     def init_conn_params(self):
         """
@@ -40,10 +41,9 @@ class RabbitMQContext:
     Context Manager for RabbitMQ connection
     """
 
-    def __init__(self, host, port, username, password):
-        self.rabbit_connector = RabbitMQConnector(host, port, username, password)
+    def __init__(self):
+        self.rabbit_connector = RabbitMQConnector()
         self.connection = None
-        self.channel = None
 
     def __enter__(self):
         """

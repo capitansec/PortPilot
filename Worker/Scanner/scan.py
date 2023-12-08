@@ -1,5 +1,6 @@
 import socket
 
+
 def port_scan(host, mode):
     """"
     Scan ports of host
@@ -13,7 +14,6 @@ def port_scan(host, mode):
             socket.setdefaulttimeout(1)
             result = sconn.connect_ex((host, port))
             if result == 0:
-
                 # Should index on elasticsearch
                 print(f"Port {port} is open")  # Will be deleted
             sconn.close()
