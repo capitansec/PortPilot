@@ -1,11 +1,5 @@
+from Config.QueueConsume import RabbitMQCallbacks
 from Config.QueueContext import RabbitMQContext
-
-
-def callback(body):
-    """
-    Callback function to process received messages
-    """
-    print(f"Received message: {body.decode()}")
 
 
 def consume_queue(rabbitmq_context):
@@ -18,7 +12,7 @@ def consume_queue(rabbitmq_context):
         channel = context[1]  # İlk değer connection, ikinci değer channel
 
         channel.queue_declare(queue=queue_name)
-        channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
+        channel.basic_consume(queue=queue_name, on_message_callback=RabbitMQCallbacks.process_message, auto_ack=True)
 
         print(f"Waiting for messages. To exit press CTRL+C")
         channel.start_consuming()
