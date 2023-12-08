@@ -1,3 +1,5 @@
+import os
+
 import pika
 from dotenv import load_dotenv
 
@@ -9,11 +11,11 @@ class RabbitMQConnector:
     Base class for RabbitMQ
     """
 
-    def __init__(self, host, port, username, password): # Will be replaced from dot env.
-        self.host = host
-        self.port = port
-        self.username = username
-        self.password = password
+    def __init__(self):
+        self.host = os.getenv("RABBITMQ_HOST")
+        self.port = int(os.getenv("RABBITMQ_PORT"))
+        self.username = os.getenv("RABBITMQ_USERNAME")
+        self.password = os.getenv("RABBITMQ_PASSWORD")
 
     def init_conn_params(self):
         """
