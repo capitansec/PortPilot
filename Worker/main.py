@@ -1,7 +1,7 @@
 from Config.QueueContext import RabbitMQContext
 
 
-def callback(ch, method, properties, body):
+def callback(body):
     """
     Callback function to process received messages
     """
