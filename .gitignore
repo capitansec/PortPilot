@@ -2,3 +2,4 @@
 venv
 .idea
 .ruff_cache
+QueurWriter.py

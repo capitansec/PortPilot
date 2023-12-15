@@ -18,15 +18,13 @@ class ElasticsearchConnector:
         self.host = os.getenv("ELASTICSEARCH_HOST")
         self.port = int(os.getenv("ELASTICSEARCH_PORT"))
         self.scheme = os.getenv("ELASTICSEARCH_SCHEME", "http")
-        self.username = os.getenv("ELASTICSEARCH_USERNAME")
-        self.password = os.getenv("ELASTICSEARCH_PASSWORD")
 
     def init_conn_str(self):
         """
         Connection string builder
         """
-        if self.username and self.password:
-            return f"{self.scheme}://{self.username}:{self.password}@{self.host}:{self.port}"
+        # if self.username and self.password:
+        #     return f"{self.scheme}://{self.username}:{self.password}@{self.host}:{self.port}"
         return f"{self.scheme}://{self.host}:{self.port}"
 
     def connect(self):

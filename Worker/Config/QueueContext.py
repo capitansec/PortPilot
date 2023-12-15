@@ -66,13 +66,3 @@ class RabbitMQContext:
             self.channel.close()
         if self.connection:
             self.connection.close()
-
-    # def send_message(self, queue_name, message):
-    #     """
-    #     Send a message to the specified queue in RabbitMQ
-    #     :param queue_name: Name of the RabbitMQ queue
-    #     :param message: The message to be sent
-    #     """
-    #     with self as (connection, channel):
-    #         channel.queue_declare(queue=queue_name)
-    #         channel.basic_publish(exchange='', routing_key=queue_name, body=message)

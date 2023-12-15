@@ -2,7 +2,7 @@ version: '3'
 
 services:
   rabbitmq:
-    image: "rabbitmq:3.9-management"
+    image: "rabbitmq:management"
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -11,6 +11,28 @@ services:
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - default
+
+  elasticsearch:
+    image: "docker.elastic.co/elasticsearch/elasticsearch:7.17.0"
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "xpack.security.enabled=false"
+
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - default
 
 volumes:
   rabbitmq_data:
+  elasticsearch_data:
+
+networks:
+  default:
+    driver: bridge
