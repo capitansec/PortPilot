@@ -29,9 +29,23 @@ services:
     networks:
       - default
 
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - elasticsearch
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - default
+
 volumes:
   rabbitmq_data:
   elasticsearch_data:
+  grafana_data:
 
 networks:
   default:

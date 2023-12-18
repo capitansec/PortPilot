@@ -7,5 +7,6 @@ class RabbitMQCallbacks:
         """
         Callback function to process received messages
         """
+        print(f"{body.decode()} is scanning")
         port_scan(body, mode=1)
-        print(f"{body} is scanning")
+
