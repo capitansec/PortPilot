@@ -42,10 +42,47 @@ services:
     networks:
       - default
 
+  postgres:
+      image: postgres:latest
+      env_file:
+        - Api/.env
+      environment:
+        POSTGRES_USER: ${DB_USERNAME}
+        POSTGRES_PASSWORD: ${DB_PASSWORD}
+        PGDATA: /data/postgres
+      volumes:
+        - database:/data/postgres
+      ports:
+        - "${DB_PORT}:5432"
+      networks:
+        - default
+
+  redis:
+    env_file:
+      - Api/.env
+    container_name: bloom-filter
+    image: redis:latest
+    ports:
+      - "${REDIS_PORT}:6379"
+    networks:
+      - default
+
+  redis-commander:
+    container_name: redis-commander
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    networks:
+      - default
+
 volumes:
   rabbitmq_data:
   elasticsearch_data:
   grafana_data:
+  database:
 
 networks:
   default:
