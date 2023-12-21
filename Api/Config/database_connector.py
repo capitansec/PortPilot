@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-load_dotenv()  # .env dosyasını yükler
+load_dotenv()  # Get variables from .env file
 
 
 class DatabaseConnector:
