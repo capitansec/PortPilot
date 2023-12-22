@@ -5,3 +5,8 @@ venv
 QueurWriter.py
 **/__pycache__/
 **/*.pyc
+
+Api/alembic.ini
+Api/alembic
+Api/.idea
+Api/Storage/**
