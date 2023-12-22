@@ -12,8 +12,8 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True, nullable=False)
-    uuid = Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False)
+    uuid = Column(UUID(as_uuid=True), default=str(uuid.uuid4()), unique=True, nullable=False)
     username = Column(String, unique=True, index=True, nullable=False)
     email = Column(String, index=True, nullable=False)
-    password = Column(String(32), nullable=False)
+    password = Column(String(64), nullable=False)
     created = Column(DateTime(timezone=True), server_default=func.now())

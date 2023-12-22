@@ -25,7 +25,7 @@ class RedisConnector:
         Enters the context and establishes a Redis connection.
         """
         self.connection = redis.Redis(host=self.host, port=self.port, db=0)
-        return self.connection
+        return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         """
@@ -33,3 +33,12 @@ class RedisConnector:
         """
         if self.connection is not None:
             self.connection.close()
+
+    def search_key(self, item):
+        return self.connection.get(item)
+
+    def write_index(self, key, timeout, value):
+        return self.connection.setex(key, timeout, value)
+
+    def delete_index(self, key):
+        return self.connection.delete(key)

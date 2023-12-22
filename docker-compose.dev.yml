@@ -53,7 +53,7 @@ services:
       volumes:
         - database:/data/postgres
       ports:
-        - "${DB_PORT}:5432"
+        - "5432:5432"
       networks:
         - default
 
@@ -63,7 +63,7 @@ services:
     container_name: bloom-filter
     image: redis:latest
     ports:
-      - "${REDIS_PORT}:6379"
+      - "6379:6379"
     networks:
       - default
 
