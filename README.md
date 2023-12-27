@@ -17,5 +17,5 @@ You can perform internal and external tests simultaneously and even perform inte
 ## Sequence Diagram
 <img src="Docs/Sequence.png">
 
-## Component Diagram
-...
+## Application Topology
+<img src="Docs/topo-new.png">
