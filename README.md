@@ -18,4 +18,4 @@ You can perform internal and external tests simultaneously and even perform inte
 <img src="Docs/Sequence.png">
 
 ## Application Topology
-<img src="Docs/topo-new.png">
+<img src="Docs/topo-new.png" width="60%">
