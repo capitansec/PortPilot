@@ -3,17 +3,14 @@ from typing import List
 from pydantic import BaseModel, EmailStr
 
 
-class UserResponse(BaseModel):
-    id: int
-    uuid: str
-    email: EmailStr
-    username: str
+class ScanResponse(BaseModel):
+    message: str
+    date: str
 
 
 class ResponseModel(BaseModel):
     status: str
-    message: str
-    result: List[UserResponse] = []
+    result: List[ScanResponse] = []
 
 
 class BaseResponse(BaseModel):

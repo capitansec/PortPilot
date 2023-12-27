@@ -1,9 +1,9 @@
 from typing import Optional
 
-from pydantic import BaseModel, IPvAnyAddress, field_validator
+from pydantic import BaseModel, IPvAnyAddress
+from pydantic import field_validator
 
-
-class Scan(BaseModel):
+class ScanModel(BaseModel):
     target: IPvAnyAddress
     comment: Optional[str]
 
@@ -21,7 +21,8 @@ class Scan(BaseModel):
 
     @field_validator("target")
     def validate_target(cls, value):
-        denied_hosts = ["localhost", "127.0.0.1", "0.0.0.0"]
+        #denied_hosts = ["localhost", "127.0.0.1", "0.0.0.0"]
+        denied_hosts = []
         if value in denied_hosts:
             raise "Can not scan agents"
         return value
