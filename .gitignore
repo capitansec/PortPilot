@@ -9,3 +9,5 @@ Api/alembic.ini
 Api/alembic
 Api/.idea
 Api/Storage/**
+**/env
+/requirements.txt
