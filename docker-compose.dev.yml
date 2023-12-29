@@ -20,7 +20,6 @@ services:
       - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - "xpack.security.enabled=false"
-
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -43,19 +42,19 @@ services:
       - default
 
   postgres:
-      image: postgres:latest
-      env_file:
-        - Api/.env
-      environment:
-        POSTGRES_USER: ${DB_USERNAME}
-        POSTGRES_PASSWORD: ${DB_PASSWORD}
-        PGDATA: /data/postgres
-      volumes:
-        - database:/data/postgres
-      ports:
-        - "5432:5432"
-      networks:
-        - default
+    image: postgres:latest
+    env_file:
+      - Api/.env
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGDATA: /data/postgres
+    volumes:
+      - database:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - default
 
   redis:
     env_file:
@@ -78,11 +77,25 @@ services:
     networks:
       - default
 
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - default
+
 volumes:
   rabbitmq_data:
   elasticsearch_data:
   grafana_data:
   database:
+  mongodb_data:
 
 networks:
   default:
