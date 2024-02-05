@@ -3,11 +3,12 @@ venv
 .idea
 .ruff_cache
 QueurWriter.py
-**/__pycache__/
+**/__pycache__
 **/*.pyc
 Api/alembic.ini
 Api/alembic
 Api/.idea
 Api/Storage/**
 **/env
+**/.env
 /requirements.txt
