@@ -49,7 +49,6 @@ const AppBody = () => {
   return (
     <Router>
       <div>
-        <h1>React Login App</h1>
         <Routes>
           <Route
             path="/login"

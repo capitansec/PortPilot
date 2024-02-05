@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import logo from './assets/logo.png'
+import { useNavigate, Link } from 'react-router-dom';
+import logo from './assets/logo.png';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+
 
 
 const LoginForm = () => {
@@ -18,10 +20,8 @@ const LoginForm = () => {
 
 
   // Validators
-  const [user, setUser] = useState('');
   const [validName, setValidName] = useState(false);
 
-  const [pwd, setPwd] = useState('');
   const [validPwd, setValidPwd] = useState(false);
 
   const [errMsg, setErrMsg] = useState('');
@@ -29,7 +29,7 @@ const LoginForm = () => {
 
   useEffect(() => {
     setErrMsg('');
-  }, [user, pwd]);
+  }, [username, password]);
 
   const handleLogin = async () => {
     try {
@@ -78,6 +78,7 @@ const LoginForm = () => {
             <div className='input-box'>
               <input 
                 type="text"
+                placeholder='Username'
                 id='username'
                 ref={userRef}
                 autoComplete='off'
@@ -86,16 +87,32 @@ const LoginForm = () => {
                 onChange={(e) => setUsername(e.target.value)}
                 aria-invalid={validName ? 'false' : 'true'}
               />
+              <UserOutlined className='icon'/>
             </div>
-            <br />
-            <label>
-              Password:
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            </label>
-            <br />
+
+           
+            <div className='input-box'>
+              <input 
+                type="password"
+                placeholder='Password'
+                id='password'
+                value={password}
+                required
+                onChange={(e) => setPassword(e.target.value)} 
+                aria-invalid={validPwd ? 'false' : 'true'}
+              />
+              <LockOutlined className='icon'/>
+            </div>
+
+            
             <button>
               Login
             </button>
+            <div className="login-link">
+                <p>
+                  Don't have an account? <Link to="/register">Register</Link>
+                </p>
+              </div>
           </form>
         
 
