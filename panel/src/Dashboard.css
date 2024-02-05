@@ -1,0 +1,41 @@
+.wrapper2 {
+    width: 1300px;
+    height: 80vh;
+    margin: 0 auto;
+    color: transparent;
+    border-radius: 40px;
+    background-color: rgba(0, 0, 0, 0.3); /* Opak arka plan rengi */
+  }
+  
+  .ant-menu-horizontal {
+    margin-left: 60px;
+    line-height: 80px;
+    background-color: transparent; /* Menü arka plan rengini temizleyin */
+    backdrop-filter: blur(30px); /* Blur efekti uygula */
+  }
+  
+  .menu-item {
+    opacity: 1; /* Item'lerin opasitesini 1 yap, böylece solmazlar */
+  }
+  
+  .ant-menu-dark .ant-menu-item-selected, .ant-menu-dark .ant-menu-item-active {
+    background-color: #2a333b;
+    border-bottom: 2px solid #2a333b;
+  }
+
+  #tester{
+    margin-left: 75%;
+  }
+
+  .base {
+    border-radius: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 620px;
+    width: 120vh;
+    background-color: rgba(0, 0, 0, 0.3); /* Yoğun opaklık */
+    backdrop-filter: blur(20px); /* Blur efekti */
+  }
+  

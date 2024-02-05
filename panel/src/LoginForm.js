@@ -31,7 +31,8 @@ const LoginForm = () => {
     setErrMsg('');
   }, [username, password]);
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     try {
       const response = await axios.post('http://localhost:8000/v1/user/login', {
         username,
