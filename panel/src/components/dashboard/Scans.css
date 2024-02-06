@@ -1,0 +1,42 @@
+.base {
+    margin-top: 30px;
+    border-radius: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 620px;
+    width: 120vh;
+    background-color: rgba(0, 0, 0, 0.2); /* Yoğun opaklık */
+    backdrop-filter: blur(20px); /* Blur efekti */
+    padding: 20px;
+  }
+
+ h2, .label-box {
+    color: azure;
+  }
+
+#ip-box {
+    width: 70%;
+}
+
+h2 {
+    margin: 20px;
+    margin-left: 50px;
+    margin-bottom: 20px;
+}
+
+.input-box{
+    justify-content: right;
+    align-items: right;
+    justify-items: right;
+    float: right;
+}
+
+.table-content {
+    background-color: rgba(240, 248, 255, 0.5); 
+    margin-top: 5%;
+    border-radius: 20px; 
+    overflow: hidden; 
+    opacity: 0.5; 
+}
