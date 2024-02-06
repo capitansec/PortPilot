@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LoginForm from './LoginForm';
+import Register from './RegisterForm'
 import Dashboard from './Dashboard';
 import { Provider, useSelector, useDispatch } from 'react-redux';
 import { createStore } from 'redux';
@@ -49,12 +50,12 @@ const AppBody = () => {
   return (
     <Router>
       <div>
-        <h1>React Login App</h1>
         <Routes>
           <Route
             path="/login"
             element={isLoggedIn ? <Navigate to="/dashboard" /> : <LoginForm />}
           />
+          <Route path='/register' Component={Register} />
           <Route
             path="/dashboard"
             element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />}

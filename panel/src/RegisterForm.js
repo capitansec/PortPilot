@@ -3,15 +3,35 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import logo from './assets/logo.png';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
+import { message } from 'antd';
 
 
 
 const LoginForm = () => {
+
+
+  //Message notification configuration
+  const [messageApi, contextHolder] = message.useMessage();
+  const success = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'This is a success message',
+    });
+  };
+  const error = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'This is an error message',
+    });
+  };
+
+
   //Initial objects
   const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
   const navigate = useNavigate();
 
   // Refs
@@ -23,38 +43,43 @@ const LoginForm = () => {
   const [validName, setValidName] = useState(false);
 
   const [validPwd, setValidPwd] = useState(false);
+  
 
   const [errMsg, setErrMsg] = useState('');
-  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     setErrMsg('');
-  }, [username, password]);
+  }, [username, password, email]);
 
-  const handleLogin = async (e) => {
+  const handleRegister = async e => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/v1/user/login', {
+      const response = await axios.post('http://localhost:8000/v1/user/register', {
         username,
         password,
+        email,
       });
 
-      const token = response.data.result;
+      const result = response.data.status;
+      if (result === 'success'){
+        message.success('User has been created');
+      }
 
-      dispatch({ type: 'LOGIN_SUCCESS', payload: { token } });
 
-      sessionStorage.setItem('token', token);
 
-      navigate('/dashboard');
+      navigate('/login');
 
     } catch (error) {
-      console.error('Login failed:', error.message);
       if (!error?.response) {
-        setErrMsg('No Server Response');
-      } else if (error.response?.status === 401) {
-        setErrMsg('Invalid Credentials');
-      } else {
-        setErrMsg('Login Failed');
+        message.error('No Server Response');
+      } 
+      
+      else if(error.response.status == 400 && error.response.data.detail === 'Username or email already exists'){
+        message.error('Username or email already exists')
+      }
+
+      else {
+        message.error('Unsupported error');
       }
       errRef.current.focus();
     }
@@ -73,9 +98,9 @@ const LoginForm = () => {
           <img src={logo} alt="Logo" />
         </div>
 
-          <h1 style={{ color: 'white' }}>Login</h1>
+          <h1 style={{ color: 'white' }}>Register</h1>
 
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleRegister}>
             <div className='input-box'>
               <input 
                 type="text"
@@ -94,9 +119,21 @@ const LoginForm = () => {
            
             <div className='input-box'>
               <input 
+                type="mail"
+                placeholder='Mail'
+                id='mail'
+                value={email}
+                required
+                onChange={(e) => setEmail(e.target.value)} 
+              />
+              <MailOutlined className='icon'/>
+            </div>
+
+            <div className='input-box'>
+              <input 
                 type="password"
                 placeholder='Password'
-                id='password'
+                id='password-valid'
                 value={password}
                 required
                 onChange={(e) => setPassword(e.target.value)} 
@@ -107,11 +144,11 @@ const LoginForm = () => {
 
             
             <button>
-              Login
+              Register
             </button>
             <div className="login-link">
                 <p>
-                  Don't have an account? <Link to="/register">Register</Link>
+                  Already have an account? <Link to="/login">Login</Link>
                 </p>
               </div>
           </form>

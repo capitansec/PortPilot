@@ -66,11 +66,14 @@ async def create_user(user: UserRegisterBase, db: Session = Depends(get_db)):
     except IntegrityError as e:
         error_message = str(e.orig)
         if "duplicate key value violates unique constraint" in error_message:
+            print(e)
             raise HTTPException(status_code=400, detail="Username or email already exists")
         else:
+            print(e)
             raise HTTPException(status_code=400,
                                 detail="An error occurred during user registration")  # Diğer IntegrityError'ları işlemek için
     except Exception as e:
+        print(e)
         log_writer(str(e), "ERROR")
         raise HTTPException(status_code=400, detail="An error occurred during user registration")
 
