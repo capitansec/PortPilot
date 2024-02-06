@@ -2,7 +2,7 @@ import React from 'react';
 import { Menu, Dropdown, Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import './Dashboard.css';
-import Scans from './components/dashboard/Scans';
+import Users from './components/dashboard/Users';
 
 
 const Dashboard = () => {
@@ -32,7 +32,7 @@ const Dashboard = () => {
         </Menu.Item>
       </Menu>
 
-      <Scans ></Scans>
+      <Users />
 
 
     </div>
