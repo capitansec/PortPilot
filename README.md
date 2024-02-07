@@ -15,24 +15,24 @@
   <a href="https://grafana.com/grafana/download"><img alt="Grafana" src="https://img.shields.io/badge/Grafana-7.0+-yellow.svg"></a>
   <a href="https://www.postgresql.org/download/"><img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-15.4(debian)+-blue.svg"></a>
 
-<p align="center">
-Port pilot is a tool for basic port scanning from different zones(WLANs, ZONEs, REGIONs). It's provide to validate firewall or binding rules. It might be very usefully for concurrent internal and external tests.
-<img src="./Docs/view.png" alt="drawing" width="550"/></p>
-<p align="center">
+<p>
+PortPilot is a cutting-edge port scanning tool designed specifically for offensive security disciplines such as bug bounty hunting and penetration testing. Its unique distributed architecture allows scalable agents to be deployed globally, providing unparalleled scanning capabilities.
+Getting started with PortPilot is as easy as installing the agent and entering the RabbitMQ connection information. The newly added agent is dynamically integrated into the system, ensuring seamless functionality.<p>
+<p align="center"><img src="./Docs/record.gif" width="700" /></p>
+<p>For ease of use, PortPilot comes with a web UI. But that's not all - it also supports API calls, offering flexibility in how you interact with the tool. To keep track of your scan results, you can conveniently use Grafana. In short, PortPilot is an indispensable tool for those seeking to augment their offensive security capabilities.
+
 <hr>
 
-<h2 align="center">Reason To Use</h2> 
+<h3 align="center">Architectural Strategy</h3>
+<p>
+PortPilot plays a critical role. It serves as the conduit, directing the hosts that are to be scanned towards RabbitMQ. RabbitMQ, in turn, is consumed by agents. These agents are in a constant race with each other, each striving to be the first to pop the hosts that are queued up for scanning.</p>
 
-<h3 align="center">Network/OS/Operation Teams</h3>
-<p align="center">
-Time by time network policies could be updated. It may cause side effects like intended accessibility. PortPilot could
-be used to test services by attempting access from multiple points.</p>
+<p>
+This competition is irrespective of the number of agents involved. Regardless of how many there are, the principle remains the same: the agent who succeeds in popping first initiates the scanning of the IP address embedded in the message. Once the scan is complete, the results are meticulously documented and stored in Elasticsearch for future reference and analysis.</p>
+ 
 
-<h3 align="center">Security Teams</h3>
-<p align="center">
-You can perform internal and external tests simultaneously and even perform inter-wlan tests simultaneously.
-</p>
-<hr> 
+<p align="center"><img src="./Docs/view.png" alt="drawing" width="550"/></p>
+<hr>
 
 <h2 align="center">Application Topology</h3>
 <p align="center">
