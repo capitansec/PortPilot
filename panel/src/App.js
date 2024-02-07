@@ -19,6 +19,12 @@ const reducer = (state = initialState, action) => {
         isLoggedIn: true,
         token: action.payload.token,
       };
+    case 'LOGOUT':
+      return {
+        ...state,
+        isLoggedIn: false,
+        token: null,
+      };
     default:
       return state;
   }

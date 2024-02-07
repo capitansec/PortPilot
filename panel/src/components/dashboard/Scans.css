@@ -1,11 +1,10 @@
 .base {
-    margin-top: 30px;
     border-radius: 20px;
     position: absolute;
-    top: 50%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
-    height: 620px;
+    height: 680px;
     width: 120vh;
     background-color: rgba(0, 0, 0, 0.2); /* Yoğun opaklık */
     backdrop-filter: blur(20px); /* Blur efekti */
@@ -17,20 +16,11 @@
   }
 
 #ip-box {
-    width: 70%;
-}
-
-h2 {
-    margin: 20px;
-    margin-left: 50px;
-    margin-bottom: 20px;
+    width: 50%;
 }
 
 .input-box{
-    justify-content: right;
-    align-items: right;
-    justify-items: right;
-    float: right;
+margin-left: 60%;
 }
 
 .table-content {

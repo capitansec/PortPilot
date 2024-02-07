@@ -2,20 +2,23 @@ from Http.Requests.scan import ScanModel
 from Providers.Queue.QueueContext import RabbitMQPublisher
 from fastapi import APIRouter
 from Config.ElasticContext import ElasticsearchContext
+from fastapi import Depends
+from Middleware.Auth.token import verify_token
+
 
 
 router = APIRouter(prefix="/v1")
 
 
 @router.post("/scan", tags=["Scan"])
-def send_target_queue(target_message: ScanModel):
+def send_target_queue(target_message: ScanModel, authenticate: str = Depends(verify_token)):
     with RabbitMQPublisher() as publisher:
         publisher.publish_message(str(target_message.target))
     return "İletildi"
 
 
 @router.get("/result", tags=["Scan"])
-def get_results():
+def get_results(authenticate: str = Depends(verify_token)):
     with ElasticsearchContext() as es:
         index_name = "port-scan"
 
