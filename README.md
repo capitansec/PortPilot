@@ -16,8 +16,11 @@
   <a href="https://www.postgresql.org/download/"><img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-15.4(debian)+-blue.svg"></a>
 
 <p align="center">
-Port pilot is a tool for basic port scanning from different zones(WLANs, ZONEs, REGIONs). It's provide to validate firewall or binding rules. It might be very usefully for concurrent internal and external tests.
-<img src="./Docs/view.png" alt="drawing" width="550"/></p>
+PortPilot is a cutting-edge port scanning tool designed specifically for offensive security disciplines such as bug bounty hunting and penetration testing. Its unique distributed architecture allows scalable agents to be deployed globally, providing unparalleled scanning capabilities.
+Getting started with PortPilot is as easy as installing the agent and entering the RabbitMQ connection information. The newly added agent is dynamically integrated into the system, ensuring seamless functionality.
+For ease of use, PortPilot comes with a web UI. But that's not all - it also supports API calls, offering flexibility in how you interact with the tool. To keep track of your scan results, you can conveniently use Grafana.
+In short, PortPilot is an indispensable tool for those seeking to augment their offensive security capabilities.
+<center><img src="./Docs/view.png" alt="drawing" width="550"/></center></p>
 <p align="center">
 <hr>
 
