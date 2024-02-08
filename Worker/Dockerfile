@@ -1,5 +1,6 @@
-FROM python:3.11.6
+FROM python:3.11.5
 WORKDIR /app
+COPY requirements.txt ./
+RUN pip install -r requirements.txt
 COPY . .
-RUN pip3 install -r requirements.txt
-CMD ["python", "main.py"]
+CMD [ "python3", "main.py" ]

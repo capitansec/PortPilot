@@ -43,8 +43,6 @@ services:
 
   postgres:
     image: postgres:latest
-    env_file:
-      - Api/.env
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -57,8 +55,6 @@ services:
       - default
 
   redis:
-    env_file:
-      - Api/.env
     container_name: bloom-filter
     image: redis:latest
     ports:
@@ -77,18 +73,82 @@ services:
     networks:
       - default
 
-  mongodb:
-    image: mongo:latest
+#  mongodb:
+#    image: mongo:latest
+#    ports:
+#      - "27017:27017"
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_ROOT_USERNAME}
+#      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_ROOT_PASSWORD}
+#      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
+#    volumes:
+#      - mongodb_data:/data/db
+#    networks:
+#      - default
+
+  pp-api:
+    container_name: "ppilot-api"
     ports:
-      - "27017:27017"
+      - "8000:80"
+    build:
+      context: Api
+      dockerfile: Dockerfile
+    image: ppilot-api:latest
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_ROOT_PASSWORD}
-      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
-    volumes:
-      - mongodb_data:/data/db
+      RABBITMQ_PORT: ${RABBITMQ_PORT}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      RABBITMQ_QUEUE_NAME: ${RABBITMQ_QUEUE_NAME}
+      ELASTICSEARCH_HOST: ${ELASTICSEARCH_HOST}
+      ELASTICSEARCH_PORT: ${ELASTICSEARCH_PORT}
+      ELASTICSEARCH_USERNAME: ${ELASTICSEARCH_USERNAME}
+      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_DRIVER: ${DB_DRIVER}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      LOG_FILE_PATH: ${LOG_FILE_PATH}
+      ALGORITHM: ${ALGORITHM}
+      SECRET_KEY: ${SECRET_KEY}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}
+    depends_on:
+      - redis
+      - postgres
     networks:
       - default
+
+  pp-worker:
+    build:
+      context: Worker
+      dockerfile: Dockerfile
+    image: ppilot-worker:latest
+    environment:
+      RABBITMQ_PORT: ${RABBITMQ_PORT}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      RABBITMQ_QUEUE_NAME: ${RABBITMQ_QUEUE_NAME}
+      ELASTICSEARCH_HOST: ${ELASTICSEARCH_HOST}
+      ELASTICSEARCH_PORT: ${ELASTICSEARCH_PORT}
+      ELASTICSEARCH_USERNAME: ${ELASTICSEARCH_USERNAME}
+      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASSWORD}
+      PYTHONUNBUFFERED: 1
+    depends_on:
+      - elasticsearch
+      - rabbitmq
+    networks:
+      - default
+
+
+
+
+
+
 
 volumes:
   rabbitmq_data:
@@ -100,3 +160,4 @@ volumes:
 networks:
   default:
     driver: bridge
+
