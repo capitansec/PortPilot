@@ -73,19 +73,6 @@ services:
     networks:
       - default
 
-#  mongodb:
-#    image: mongo:latest
-#    ports:
-#      - "27017:27017"
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_ROOT_USERNAME}
-#      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_ROOT_PASSWORD}
-#      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
-#    volumes:
-#      - mongodb_data:/data/db
-#    networks:
-#      - default
-
   pp-api:
     container_name: "ppilot-api"
     ports:
@@ -96,7 +83,7 @@ services:
     image: ppilot-api:latest
     environment:
       RABBITMQ_PORT: ${RABBITMQ_PORT}
-      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_HOST: ${RABBITMQ_HOST} 
       RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
       RABBITMQ_QUEUE_NAME: ${RABBITMQ_QUEUE_NAME}
@@ -145,11 +132,6 @@ services:
       - default
 
 
-
-
-
-
-
 volumes:
   rabbitmq_data:
   elasticsearch_data:
@@ -160,4 +142,3 @@ volumes:
 networks:
   default:
     driver: bridge
-
