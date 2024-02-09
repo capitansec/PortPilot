@@ -1,7 +1,6 @@
 COMPOSE_FILE := docker-compose.dev.yaml
 DB_SERVICE := postgres
-DB_NAME := your_database_name
-DDL_SCRIPT := path/to/your/ddl_script.sql
+DDL_SCRIPT := ./Migrations/initial-migration.sql
 
 .PHONY: build up migrate
 
