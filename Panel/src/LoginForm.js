@@ -8,6 +8,8 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 
 const LoginForm = () => {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+
   //Initial objects
   const dispatch = useDispatch();
   const [username, setUsername] = useState('');
@@ -34,7 +36,7 @@ const LoginForm = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/v1/user/login', {
+      const response = await axios.post(BASE_URL + '/v1/user/login', {
         username,
         password,
       });

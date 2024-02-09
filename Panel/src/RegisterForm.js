@@ -9,6 +9,7 @@ import { message } from 'antd';
 
 
 const LoginForm = () => {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 
   //Message notification configuration
@@ -54,7 +55,7 @@ const LoginForm = () => {
   const handleRegister = async e => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/v1/user/register', {
+      const response = await axios.post(BASE_URL + '/v1/user/register', {
         username,
         password,
         email,

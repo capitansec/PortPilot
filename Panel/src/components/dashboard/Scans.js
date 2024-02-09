@@ -7,12 +7,13 @@ import { Pagination } from 'antd';
 const pageSize = 7;
 
 const Scans = () => {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [searchTerm, setSearchTerm] = useState('');
   const [scanResults, setScanResults] = useState([]);
 
   const handleScan = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/v1/scan', {
+      const response = await axios.post(BASE_URL + '/v1/scan', {
         target: searchTerm, 
         comment: 'string',
       }, {
@@ -35,7 +36,7 @@ const Scans = () => {
 
   const handleScanResults = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/v1/result', {
+      const response = await axios.get(BASE_URL + '/v1/result', {
         headers: {
           'accept': 'application/json',
           'Authorization': `Bearer ${sessionStorage.getItem('token')}`,

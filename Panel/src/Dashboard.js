@@ -9,13 +9,14 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
 const Dashboard = () => {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [activeComponent, setActiveComponent] = useState('scans'); // Default to 'scans'
 
   const handleLogout = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/v1/user/logout', {
+      const response = await axios.get(BASE_URL + '/v1/user/logout', {
         headers: {
           'accept': 'application/json',
           'Authorization': `Bearer ${sessionStorage.getItem('token')}`,

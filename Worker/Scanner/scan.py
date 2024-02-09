@@ -36,6 +36,9 @@ def port_scan(host, mode):
             if result == 0:
                 open_ports.append(port)
                 print(f"Port {port} is open")
+
+            else:
+                print(f"port is closed")
             sconn.close()
 
         index_ports(host, open_ports)

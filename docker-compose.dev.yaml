@@ -131,6 +131,22 @@ services:
     networks:
       - default
 
+  panel:
+    build:
+      context: Panel
+      dockerfile: Dockerfile
+    image: pp-panel:latest
+    ports:
+      - "8080:8080"
+    environment:
+      REACT_APP_BASE_URL: ${REACT_APP_BASE_URL}
+    depends_on:
+      - pp-api
+      - redis
+      - postgres
+    networks:
+      - default
+
 
 volumes:
   rabbitmq_data:

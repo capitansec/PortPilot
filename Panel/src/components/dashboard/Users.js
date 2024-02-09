@@ -5,6 +5,8 @@ import axios from 'axios';
 import { Pagination } from 'antd';
 
 const pageSize = 7;
+const BASE_URL = process.env.REACT_APP_BASE_URL || '';
+
 
 const Users = () => {
   const [userData, setUserData] = useState([]);
@@ -14,7 +16,7 @@ const Users = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/v1/users', {
+        const response = await axios.get(BASE_URL + '/v1/users', {
           headers: {
             'accept': 'application/json',
             'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
