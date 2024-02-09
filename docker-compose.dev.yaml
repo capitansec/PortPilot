@@ -132,12 +132,16 @@ services:
       - default
 
   panel:
+
+    stdin_open: true
     build:
+      args:
+        - REACT_APP_BASE_URL=${REACT_APP_BASE_URL}
       context: Panel
       dockerfile: Dockerfile
     image: pp-panel:latest
     ports:
-      - "8080:8080"
+      - "8080:3000"
     environment:
       REACT_APP_BASE_URL: ${REACT_APP_BASE_URL}
     depends_on:

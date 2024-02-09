@@ -9,6 +9,8 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 const LoginForm = () => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  console.log(BASE_URL)
+  console.log(process.env.REACT_APP_BASE_URL);
 
   //Initial objects
   const dispatch = useDispatch();
@@ -70,6 +72,7 @@ const LoginForm = () => {
         <p ref={errRef} className={errMsg ? 'errmsg' : 'offscreen'} aria-live="assertive">
           {errMsg}
         </p>
+
 
         <div className="logo-context">
           <img src={logo} alt="Logo" />
