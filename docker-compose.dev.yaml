@@ -54,6 +54,22 @@ services:
     networks:
       - default
 
+  initdb:
+    image: postgres:latest
+    command: [ "bash", "-c", "sleep 5 && psql -h postgres -U ${DB_USERNAME} -c 'CREATE DATABASE ${DB_DATABASE}' && psql -h postgres -U ${DB_USERNAME} -d ${DB_DATABASE} -a -f /docker-entrypoint-initdb.d/init-script.sql" ]
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+    volumes:
+      - ./Migrations/initial-migration.sql:/docker-entrypoint-initdb.d/init-script.sql
+
+
   redis:
     container_name: bloom-filter
     image: redis:latest

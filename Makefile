@@ -10,3 +10,6 @@ build:
 
 up:
 	docker-compose -f $(COMPOSE_FILE) up -d
+
+migrate:
+	docker-compose run --rm initdb
