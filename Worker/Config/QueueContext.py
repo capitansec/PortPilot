@@ -25,7 +25,9 @@ class RabbitMQConnector:
         credentials = pika.PlainCredentials(self.username, self.password)
         parameters = pika.ConnectionParameters(host=self.host,
                                                port=self.port,
-                                               credentials=credentials)
+                                               credentials=credentials,
+                                               connection_attempts=3,
+                                               retry_delay=5,)
         return parameters
 
     def connect(self):

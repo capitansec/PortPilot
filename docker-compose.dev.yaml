@@ -76,7 +76,7 @@ services:
   pp-api:
     container_name: "ppilot-api"
     ports:
-      - "8000:80"
+      - "8000:8000"
     build:
       context: Api
       dockerfile: Dockerfile
