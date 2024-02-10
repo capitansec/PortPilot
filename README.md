@@ -14,6 +14,8 @@
   <a href="https://www.rabbitmq.com/download.html"><img alt="RabbitMQ" src="https://img.shields.io/badge/RabbitMQ-management+-orange.svg"></a>
   <a href="https://grafana.com/grafana/download"><img alt="Grafana" src="https://img.shields.io/badge/Grafana-7.0+-yellow.svg"></a>
   <a href="https://www.postgresql.org/download/"><img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-15.4(debian)+-blue.svg"></a>
+  <a href="https://www.postgresql.org/download/"><img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-15.4(debian)+-blue.svg"></a>
+  <a href="https://reactjs.org/" rel="nofollow"><img alt="React 18.2" src="https://img.shields.io/badge/React-18.2-61DAFB.svg"></a>
 
 <p>
 PortPilot is a cutting-edge port scanning tool designed specifically for offensive security disciplines such as bug bounty hunting and penetration testing. Its unique distributed architecture allows scalable agents to be deployed globally, providing unparalleled scanning capabilities.
@@ -21,9 +23,65 @@ Getting started with PortPilot is as easy as installing the agent and entering t
 <p align="center"><img src="./Docs/record.gif" width="700" /></p>
 <p>For ease of use, PortPilot comes with a web UI. But that's not all - it also supports API calls, offering flexibility in how you interact with the tool. To keep track of your scan results, you can conveniently use Grafana. In short, PortPilot is an indispensable tool for those seeking to augment their offensive security capabilities.
 
+
+<h2 align="center">Quick Setup</h2>
 <hr>
 
+
+**REACT_APP_BASE_URL:** You can change the assignment of the variable according to your own server ip information. Or you can keep it as default.
+
+Default .env variable:
+
+  ```env
+  REACT_APP_BASE_URL=http://127.0.0.1:8000
+  ```
+
+
+1. **make build:**
+   Use to build components of the project.
+
+    ```bash
+    make build
+    ```
+
+2. **make up:**
+   Use this command to start the application.
+
+    ```bash
+    make up
+    ```
+
+3. **make migrate:**
+   Run the following command to create and update the database.
+
+    ```bash
+    make migrate
+    ```
+
+
+   After following these steps, your application will be successfully installed.
+
+Note: During the `make migrate` command you may be prompted to enter the password from your .env file.
+
+<h2 align="center">How To Use</h2>
+<hr>
+
+1. **make up:**
+   Use this command to start the application. **Then Application will be avaible at** **http://localhost:8080**
+
+    ```bash
+    make up
+    ```
+
+2. **make Down:**
+   Run the following command to stop application services.
+
+    ```bash
+    make migrate
+    ```
+<p align="center"><img src="./Docs/homescreen.png" width="400" /></p>
 <h3 align="center">Architectural Strategy</h3>
+<hr>
 <p>
 PortPilot plays a critical role. It serves as the conduit, directing the hosts that are to be scanned towards RabbitMQ. RabbitMQ, in turn, is consumed by agents. These agents are in a constant race with each other, each striving to be the first to pop the hosts that are queued up for scanning.</p>
 
@@ -32,14 +90,18 @@ This competition is irrespective of the number of agents involved. Regardless of
  
 
 <p align="center"><img src="./Docs/view.png" alt="drawing" width="550"/></p>
-<hr>
+
+
+
 
 <h2 align="center">Application Topology</h3>
+<hr>
 <p align="center">
 <img src="Docs/topo-new.png" width="60%"></p>
 
 
 
 <h2 align="center">Sequence Diagram</h3>
+<hr>
 <p align="center">
 <img src="Docs/Sequence.png"></p>

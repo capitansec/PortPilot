@@ -58,6 +58,10 @@ const AppBody = () => {
       <div>
         <Routes>
           <Route
+            path="/"
+            element={isLoggedIn ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
+          />
+          <Route
             path="/login"
             element={isLoggedIn ? <Navigate to="/dashboard" /> : <LoginForm />}
           />
