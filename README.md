@@ -102,6 +102,6 @@ This competition is irrespective of the number of agents involved. Regardless of
 
 
 <h2 align="center">Sequence Diagram</h3>
-<hr>
+
 <p align="center">
 <img src="Docs/Sequence.png"></p>
