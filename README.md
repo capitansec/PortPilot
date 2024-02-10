@@ -6,7 +6,7 @@
   <a href="https://github.com/capitansec/PortPilot/issues"><img src="https://img.shields.io/github/issues/capitansec/PortPilot.svg" alt="Issues"></a>
   <a href="https://github.com/capitansec/PortPilot/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/capitansec/PortPilot" alt="License"></a>
   <a href="https://discord.com/users/capitan8674"><img src="https://img.shields.io/badge/discord-add-green.svg"></a>
-  <hr><p align="center">
+ <p align="center">
   <a href="http://www.python.org/download/"><img alt="Python 3.9+" src="https://img.shields.io/badge/Python-3.9+-yellow.svg"></a>
   <a href="https://fastapi.tiangolo.com/"><img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-0.108+-green.svg"></a>
   <a href="https://www.elastic.co/downloads/elasticsearch"><img alt="Elasticsearch" src="https://img.shields.io/badge/Elasticsearch-7.17.0+-blue.svg"></a>
@@ -25,7 +25,7 @@ Getting started with PortPilot is as easy as installing the agent and entering t
 
 
 <h2 align="center">Quick Setup</h2>
-<hr>
+
 
 
 **REACT_APP_BASE_URL:** You can change the assignment of the variable according to your own server ip information. Or you can keep it as default.
@@ -64,7 +64,7 @@ Default .env variable:
 Note: During the `make migrate` command you may be prompted to enter the password from your .env file.
 
 <h2 align="center">How To Use</h2>
-<hr>
+
 
 1. **make up:**
    Use this command to start the application. **Then Application will be avaible at** **http://localhost:8080**
@@ -81,7 +81,7 @@ Note: During the `make migrate` command you may be prompted to enter the passwor
     ```
 <p align="center"><img src="./Docs/homescreen.png" width="400" /></p>
 <h3 align="center">Architectural Strategy</h3>
-<hr>
+
 <p>
 PortPilot plays a critical role. It serves as the conduit, directing the hosts that are to be scanned towards RabbitMQ. RabbitMQ, in turn, is consumed by agents. These agents are in a constant race with each other, each striving to be the first to pop the hosts that are queued up for scanning.</p>
 
@@ -95,7 +95,7 @@ This competition is irrespective of the number of agents involved. Regardless of
 
 
 <h2 align="center">Application Topology</h3>
-<hr>
+
 <p align="center">
 <img src="Docs/topo-new.png" width="60%"></p>
 
