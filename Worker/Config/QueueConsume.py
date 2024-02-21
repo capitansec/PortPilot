@@ -1,4 +1,5 @@
 from Scanner.scan import port_scan
+import json
 
 
 class RabbitMQCallbacks:
@@ -6,7 +7,11 @@ class RabbitMQCallbacks:
     def process_message(ch, method, properties, body):
         """
         Callback function to process received messages
-        :param body: Sent message
+        :param body: Received message as bytes
         """
-        print(f"{body.decode()} is scanning")
-        port_scan(body, mode=1)
+
+
+        print("Received message:", (body.decode('utf-8')))
+
+
+

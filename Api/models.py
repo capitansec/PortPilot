@@ -1,8 +1,9 @@
 import uuid
 
-from sqlalchemy import Column, Integer, String, DateTime, MetaData
+from sqlalchemy import Column, Integer, String, DateTime, MetaData, ForeignKey, Boolean, Table
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 Base = declarative_base(metadata=MetaData())
@@ -17,3 +18,6 @@ class User(Base):
     email = Column(String, index=True, nullable=False)
     password = Column(String(64), nullable=False)
     created = Column(DateTime(timezone=True), server_default=func.now())
+
+
+
