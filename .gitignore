@@ -12,3 +12,4 @@ Api/Storage/**
 **/env
 **/.env
 /requirements.txt
+/Api/.env
