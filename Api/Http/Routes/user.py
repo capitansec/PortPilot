@@ -2,7 +2,7 @@ import os
 
 from fastapi import APIRouter, Depends, Security, HTTPException
 from Http.Requests.user import UserLoginBase, UserRegisterBase
-from Providers.Auth.authenticate import authenticate_user
+from Providers.Auth.authenticate import authenticate_user, InvalidCredentialsException
 from Providers.Cryptology.sha256 import encrypter
 from Providers.Environment.environment import *
 from Middleware.Auth.token import verify_token
@@ -23,7 +23,7 @@ from Providers.Log.log_writter import log_writer
 router = APIRouter(prefix="/v1")
 
 
-@router.post("/user/login", tags=["User"])
+@router.post("/user/login", tags=["User"], response_model=BaseResponse)
 async def login_user(user: UserLoginBase, db: Session = Depends(get_db)):
     try:
         authenticated_user = await authenticate_user(user.username, user.password, db)
@@ -42,12 +42,14 @@ async def login_user(user: UserLoginBase, db: Session = Depends(get_db)):
         response = BaseResponse(status="success", message="User logged in successfully", result=jwt_token)
         return JSONResponse(status_code=200, content=response.dict())
 
+    except InvalidCredentialsException as e:
+        return JSONResponse(status_code=400, content=e.detail)
     except Exception as e:
         log_writer(str(e), "ERROR")
         raise HTTPException(status_code=500, detail="An error occurred")
 
 
-@router.post("/user/register", tags=["User"])
+@router.post("/user/register", tags=["User"], response_model=BaseResponse)
 async def create_user(user: UserRegisterBase, db: Session = Depends(get_db)):
     try:
         hashed_password = await encrypter(user.password)
@@ -66,16 +68,13 @@ async def create_user(user: UserRegisterBase, db: Session = Depends(get_db)):
     except IntegrityError as e:
         error_message = str(e.orig)
         if "duplicate key value violates unique constraint" in error_message:
-            print(e)
             raise HTTPException(status_code=400, detail="Username or email already exists")
         else:
-            print(e)
             raise HTTPException(status_code=400,
                                 detail="An error occurred during user registration")  # Diğer IntegrityError'ları işlemek için
     except Exception as e:
-        print(e)
         log_writer(str(e), "ERROR")
-        raise HTTPException(status_code=400, detail="An error occurred during user registration")
+        raise HTTPException(status_code=500, detail="An error occurred during user registration")
 
 
 @router.get("/user/logout", tags=["User"])
