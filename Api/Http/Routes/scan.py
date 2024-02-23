@@ -1,8 +1,10 @@
 import json
 
 from Http.Requests.scan import ScanModel, ScanRequestModel
+from Http.Responses.scan import BaseResponse, BaseResponseScan
 from Providers.Queue.QueueContext import RabbitMQPublisher
-from fastapi import APIRouter
+from Providers.Log.log_writter import log_writer
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from Config.ElasticContext import ElasticsearchContext
 from fastapi import Depends
@@ -10,6 +12,7 @@ from Middleware.Auth.token import verify_token
 from fastapi.encoders import jsonable_encoder
 
 router = APIRouter(prefix="/v1")
+router_new = APIRouter(prefix="/v2")
 
 
 @router.post("/scan", tags=["Scan"])
@@ -53,17 +56,23 @@ def get_results(authenticate: str = Depends(verify_token)):
         return {"results": results}
 
 
-@router.post("/scan_new", tags=["Scan"])
+@router_new.post("/scan", tags=["Scan"])
 def send_target_queue(target_message: ScanRequestModel, authenticate: str = Depends(verify_token)):
-    target_message.target = str(target_message.target)
-    target_message.request_datetime = str(target_message.request_datetime.strftime("%Y-%m-%d %H:%M:%S"))
-    msg = json.dumps(target_message.dict())
-    with RabbitMQPublisher() as publisher:
-        publisher.publish_message(msg)
-    return "sent"
+    try:
+        target_message.target = str(target_message.target)
+        target_message.request_datetime = str(target_message.request_datetime.strftime("%Y-%m-%d %H:%M:%S"))
+        msg = json.dumps(target_message.dict())
+        with RabbitMQPublisher() as publisher:
+            publisher.publish_message(msg)
+        response = BaseResponse(status="success", message="task has been queued", result="")
+        return JSONResponse(status_code=200, content=response.dict())
+    except Exception as e:
+        log_writer(str(e), "ERROR")
+        return HTTPException(status_code=500, content=str(e))
 
 
-@router.get("/result_new", tags=["Scan"])
+
+@router_new.get("/result", tags=["Scan"])
 def get_scan_result(scan_id: str, authenticate: str = Depends(verify_token)):
     with ElasticsearchContext() as es:
         try:
@@ -93,34 +102,32 @@ def get_scan_result(scan_id: str, authenticate: str = Depends(verify_token)):
             if not scans:
                 raise HTTPException(status_code=404, detail="Scan not found")
 
-            return {"scans": scans}
+            response = BaseResponseScan(status="success", message="Scan found", result={"scans": scans})
+            return JSONResponse(status_code=200, content=response.dict())
 
         except Exception as e:
+            log_writer(e, "ERROR")
             raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/result/all")
+@router_new.get("/results", tags=["Scan"])
 def get_all_results():
     with ElasticsearchContext() as es:
         try:
             result = es.search(index="port-scan", body={"query": {"match_all": {}}})
+            scans = [
+                {
+                    "scan_id": source.get("scan_id", ""),
+                    "scan_name": source.get("scan_name", ""),
+                    "scan_owner": source.get("scan_owner", ""),
+                    "scan_datetime": source.get("@timestamp", ""),
+                    "host": list(source.get('hosts', [{}])[0].keys())[0]
+                }
+                for hit in result['hits']['hits'] if (source := hit['_source']).get('hosts')
+            ]
 
-            scans = []
-            for hit in result['hits']['hits']:
-                source = hit['_source']
-                host_data = source.get('hosts', [])
-                if host_data:
-                    host_key = list(host_data[0].keys())[0]
-                    scan = {
-                        "scan_id": source.get("scan_id"),
-                        "scan_name": source.get("scan_name"),
-                        "scan_owner": source.get("scan_owner"),
-                        "scan_datetime": source.get("@timestamp"),
-                        "host": host_key
-                    }
-                    scans.append(scan)
-
-            return {"scans": scans}
+            response = BaseResponseScan(status="success", message="Scan found", result={"scans": scans})
+            return JSONResponse(status_code=200, content=response.dict())
 
         except Exception as e:
             return {"error": str(e)}

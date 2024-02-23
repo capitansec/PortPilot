@@ -20,3 +20,15 @@ class BaseResponse(BaseModel):
     status: str
     message: str
     result: str
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "status": "status of activity result",
+                    "message": "message for activity, frontend notifications",
+                    "result": "expected values from activity"
+                }
+            ]
+        }
+    }
