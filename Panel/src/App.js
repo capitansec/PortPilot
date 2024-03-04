@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LoginForm from './LoginForm';
+import ScanWindow from "./components/dashboard/ScanWindow";
 import Register from './RegisterForm'
 import Dashboard from './Dashboard';
 import { Provider, useSelector, useDispatch } from 'react-redux';
@@ -57,6 +58,8 @@ const AppBody = () => {
     <Router>
       <div>
         <Routes>
+          <Route
+            path="/scanwindow" Component={ScanWindow} />
           <Route
             path="/"
             element={isLoggedIn ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}

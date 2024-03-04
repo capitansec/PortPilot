@@ -1,106 +1,181 @@
-import React, { useState, useEffect } from 'react';
+// Scans.js
+import React, { useState } from 'react';
 import './Scans.css';
-import { Button, Input, Table, message } from 'antd'; 
+import ScanTable from './ScanTable';
+import ScanModal from './ScanModal';
+import FilterModal from "./FilterModal";
+import { Button, Table, message } from 'antd';
 import axios from 'axios';
-import { Pagination } from 'antd';
+import {PlusCircleFilled, PlusCircleOutlined, ReloadOutlined, SearchOutlined} from "@ant-design/icons";
 
 const pageSize = 7;
 
 const Scans = () => {
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
-  const [searchTerm, setSearchTerm] = useState('');
-  const [scanResults, setScanResults] = useState([]);
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
+    const [searchTerm, setSearchTerm] = useState('');
+    const [scanResults, setScanResults] = useState([]);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [formData, setFormData] = useState({
+        scanName: '',
+        ipAddress: ''
+    });
 
-  const handleScan = async () => {
-    try {
-      const response = await axios.post(BASE_URL + '/v1/scan', {
-        target: searchTerm, 
-        comment: 'string',
-      }, {
-        headers: {
-          'accept': 'application/json',
-          'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
-          'Content-Type': 'application/json',
+
+
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+
+
+    const handleOk = () => {
+        sendScanRequest();
+        setIsModalVisible(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
+
+    const handleScanResults = async () => {
+        try {
+            const response = await axios.get(BASE_URL + '/v2/results', {
+                headers: {
+                    'accept': 'application/json',
+                    'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+                },
+            });
+
+            if (response.data.status === 'success' && response.data.result && response.data.result.scans) {
+                const formattedResults = response.data.result.scans.map(scan => ({
+                    key: scan.scan_id,
+                    uuid: scan.scan_id,
+                    scan_owner: scan.scan_owner,
+                    scan_name: scan.scan_name,
+                    ip: scan.host,
+                    datetime: scan.scan_datetime,
+                }));
+
+                setScanResults(formattedResults);
+            }
+        } catch (error) {
+            console.error('Error fetching scan results:', error);
+        }
+    };
+
+    const sendScanRequest = async () => {
+        try {
+            const response = await axios.post(BASE_URL + '/v2/scan', {
+                scan_name: formData.scanName,
+                target: formData.ipAddress,
+            }, {
+                headers: {
+                    'accept': 'application/json',
+                    'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.data === 'sent') {
+                message.success('Scan request has been successfully sent.');
+                setSearchTerm('');
+                setFormData({
+                    scanName: '',
+                    ipAddress: ''
+                });
+            }
+        } catch (error) {
+            console.error('Error sending scan request:', error);
+            message.error('Error sending scan request. Please try again.');
+        }
+    };
+
+    const columns = [
+        {
+            title: 'UUID',
+            dataIndex: 'uuid',
+            key: 'uuid',
         },
-      });
-  
-      if (response.data === 'İletildi') {
-        message.success('Scan request has been successfully sent.');
-        setSearchTerm(''); 
-      }
-    } catch (error) {
-      console.error('Error sending scan request:', error);
-      message.error('Error sending scan request. Please try again.'); 
-    }
-  };
-
-  const handleScanResults = async () => {
-    try {
-      const response = await axios.get(BASE_URL + '/v1/result', {
-        headers: {
-          'accept': 'application/json',
-          'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+        {
+            title: 'Scan Owner',
+            dataIndex: 'scan_owner',
+            key: 'scan_owner',
         },
-      });
+        {
+            title: 'Scan Name',
+            dataIndex: 'scan_name',
+            key: 'scan_name',
+        },
+        {
+            title: 'IP',
+            dataIndex: 'ip',
+            key: 'ip',
+        },
+        {
+            title: 'Datetime',
+            dataIndex: 'datetime',
+            key: 'datetime',
+        },
+    ];
 
-      if (response.data.results) {
-        setScanResults(response.data.results);
-      }
-    } catch (error) {
-      console.error('Error fetching scan results:', error);
-    }
-  };
+    const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
 
-  const columns = [
-    {
-      title: 'IP',
-      dataIndex: 'ip',
-      key: 'ip',
-    },
-    {
-      title: 'Port',
-      dataIndex: 'port',
-      key: 'port',
-    },
-    {
-      title: 'State',
-      dataIndex: 'state',
-      key: 'state',
-    },
-    {
-      title: 'Timestamp',
-      dataIndex: '@timestamp',
-      key: '@timestamp',
-    },
-  ];
+    const showFilterModal = () => {
+        setIsFilterModalVisible(true);
+    };
 
-  return (
-    <>
-      <div className='base'>
-        <div className='input-box' >
-          <input style={{marginRight: '20px'}}
-            type="text"
-            placeholder='IP or Hostname'
-            id='ip-box'
-            onChange={(e) => setSearchTerm(e.target.value)} 
-            value={searchTerm} 
-            required
-          />
-          <Button type="primary" danger style={{marginRight: '20px'}} onClick={handleScan}>
-            Scan
-          </Button>
+    const handleFilterModalOk = () => {
+        // Handle filter modal OK if needed
+        setIsFilterModalVisible(false);
+    };
 
-          <Button type="primary" onClick={handleScanResults}>
-            Refresh
-          </Button>
-        </div>
+    const handleFilterModalCancel = () => {
+        setIsFilterModalVisible(false);
+    };
 
-        <div className='table-content'>
-          <Table columns={columns} dataSource={scanResults} pagination={{ pageSize }} />
-        </div>
-      </div>
-    </>
-  );
+    const applyFilters = (filters) => {
+        // Handle applying filters (e.g., send a request with filters)
+        console.log('Applied filters:', filters);
+    };
+
+    return (
+        <>
+            <div className='base'>
+                <div className='input-box'>
+                    <Button type="primary" style={{ marginRight: '20px', backgroundColor:"#6494aa" }} onClick={handleScanResults}>
+                       <ReloadOutlined /> Refresh
+                    </Button>
+
+                    <Button type="primary" style={{ marginRight: "20px", backgroundColor:"#AE8799"}} onClick={showFilterModal}>
+                        <SearchOutlined />Filter
+                    </Button>
+
+
+                    <Button type="primary" style={{ marginRight: "10px", backgroundColor:"#90A959"}} danger onClick={showModal}>
+                        <PlusCircleOutlined />Create
+                    </Button>
+                </div>
+
+                <div className='table-content'>
+                    <ScanTable columns={columns} scanResults={scanResults} pageSize={pageSize} />
+                </div>
+                <ScanModal
+                    isModalVisible={isModalVisible}
+                    handleOk={handleOk}
+                    handleCancel={handleCancel}
+                    formData={formData}
+                    setFormData={setFormData}
+                    sendScanRequest={sendScanRequest}
+                />
+
+                <FilterModal
+                    isModalVisible={isFilterModalVisible}
+                    handleOk={handleFilterModalOk}
+                    handleCancel={handleFilterModalCancel}
+                    applyFilters={applyFilters}
+                />
+            </div>
+        </>
+    );
 };
 
 export default Scans;

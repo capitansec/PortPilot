@@ -77,7 +77,7 @@ async def create_user(user: UserRegisterBase, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail="An error occurred during user registration")
 
 
-@router.get("/user/logout", tags=["User"])
+@router.get("/user/logout", tags=["User"], response_model=BaseResponse)
 async def logout_user(Authorization: str = Security(HTTPBearer())):
     try:
         token = Authorization.credentials
@@ -94,15 +94,15 @@ async def logout_user(Authorization: str = Security(HTTPBearer())):
             raise HTTPException(status_code=400, detail="User not logged in")
 
     except InvalidSignatureError:
-        raise HTTPException(status_code=400, detail="User not logged in")  # cookie yanlış ya da manipüle edilmeye çalışılıyorsa
+        raise HTTPException(status_code=400,
+                            detail="User not logged in")  # cookie yanlış ya da manipüle edilmeye çalışılıyorsa
 
     except Exception as e:
         log_writer(str(e), "ERROR")
         raise HTTPException(status_code=400, detail="User not logged out")
 
 
-
-@router.get("/user/{uuid}", tags=["User"])
+@router.get("/user/{uuid}", tags=["User"], response_model=ResponseModel)
 async def get_user(uuid: str, db: Session = Depends(get_db), authenticate: str = Depends(verify_token)):
     try:
         valid_uuid = UUID(uuid)
@@ -132,7 +132,7 @@ async def get_user(uuid: str, db: Session = Depends(get_db), authenticate: str =
         raise HTTPException(status_code=500, detail="An error occurred.")
 
 
-@router.get("/users", tags=["User"])
+@router.get("/users", tags=["User"], response_model=ResponseModel)
 async def get_all_users(db: Session = Depends(get_db), authenticate: str = Depends(verify_token)):
     try:
         db_users = db.query(User).all()
