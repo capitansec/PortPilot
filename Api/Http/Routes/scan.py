@@ -1,4 +1,6 @@
+import datetime
 import json
+import uuid
 
 from Http.Requests.scan import ScanModel, ScanRequestModel
 from Http.Responses.scan import BaseResponse, BaseResponseScan
@@ -8,8 +10,9 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from Config.ElasticContext import ElasticsearchContext
 from fastapi import Depends
-from Middleware.Auth.token import verify_token
+from Middleware.Auth.token import verify_token, get_current_user
 from fastapi.encoders import jsonable_encoder
+from typing import Optional
 
 router = APIRouter(prefix="/v1")
 router_new = APIRouter(prefix="/v2")
@@ -56,31 +59,40 @@ def get_results(authenticate: str = Depends(verify_token)):
         return {"results": results}
 
 
-@router_new.post("/scan", tags=["Scan"])
-def send_target_queue(target_message: ScanRequestModel, authenticate: str = Depends(verify_token)):
+@router_new.post("/scan", tags=["Scan"], response_model=BaseResponse)
+async def send_target_queue(
+        scan_request: ScanRequestModel,
+        current_user: str = Depends(get_current_user)
+):
     try:
-        target_message.target = str(target_message.target)
-        target_message.request_datetime = str(target_message.request_datetime.strftime("%Y-%m-%d %H:%M:%S"))
-        msg = json.dumps(target_message.dict())
+        message = {
+            "scan_id": str(uuid.uuid4()),
+            "scan_owner": str(current_user),
+            "request_datetime": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:"),
+            "scan_name": scan_request.scan_name,
+            "target": str(scan_request.target)
+        }
+
+        msg = json.dumps(message)
         with RabbitMQPublisher() as publisher:
             publisher.publish_message(msg)
-        response = BaseResponse(status="success", message="task has been queued", result="")
-        return JSONResponse(status_code=200, content=response.dict())
+
+        response = BaseResponse(status="success", message="Task has been queued", result="")
+        return response
     except Exception as e:
         log_writer(str(e), "ERROR")
-        return HTTPException(status_code=500, content=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-
-@router_new.get("/result", tags=["Scan"])
-def get_scan_result(scan_id: str, authenticate: str = Depends(verify_token)):
+@router_new.get("/result/{uuid}", tags=["Scan"], response_model=BaseResponseScan)
+def get_scan_result(uuid: str, authenticate: str = Depends(verify_token)):
     with ElasticsearchContext() as es:
         try:
             result = es.search(index="port-scan", body={
                 "query": {
                     "bool": {
                         "must": [
-                            {"match": {"scan_id": scan_id}}
+                            {"match": {"scan_id": uuid}}
                         ]
                     }
                 }
@@ -110,11 +122,28 @@ def get_scan_result(scan_id: str, authenticate: str = Depends(verify_token)):
             raise HTTPException(status_code=500, detail=str(e))
 
 
-@router_new.get("/results", tags=["Scan"])
-def get_all_results():
+@router_new.get("/results", tags=["Scan"], response_model=BaseResponseScan)
+def get_all_results(
+        scan_name: Optional[str] = None,
+        scan_owner: Optional[str] = None,
+        host: Optional[str] = None,
+        scan_datetime: Optional[str] = None
+):
     with ElasticsearchContext() as es:
         try:
-            result = es.search(index="port-scan", body={"query": {"match_all": {}}})
+            query = {"query": {"bool": {"must": []}}}
+
+            if scan_name:
+                query["query"]["bool"]["must"].append({"match": {"scan_name": scan_name}})
+            if scan_owner:
+                query["query"]["bool"]["must"].append({"match": {"scan_owner": scan_owner}})
+            if host:
+                query["query"]["bool"]["must"].append({"match": {"hosts": host}})
+            if scan_datetime:
+                query["query"]["bool"]["must"].append({"match": {"@timestamp": scan_datetime}})
+
+            result = es.search(index="port-scan", body=query)
+
             scans = [
                 {
                     "scan_id": source.get("scan_id", ""),

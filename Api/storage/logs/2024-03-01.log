@@ -1,0 +1,5 @@
+2024-03-01 16:59:06 [ERROR] Invalid token type. Token must be a <class 'bytes'>
+2024-03-01 17:00:57 [ERROR] Invalid token type. Token must be a <class 'bytes'>
+2024-03-01 17:01:15 [ERROR] Invalid token type. Token must be a <class 'bytes'>
+2024-03-01 17:02:02 [ERROR] 'ScanRequestModel' object has no attribute 'request_datetime'
+2024-03-01 17:02:46 [ERROR] Object of type IPv4Address is not JSON serializable
