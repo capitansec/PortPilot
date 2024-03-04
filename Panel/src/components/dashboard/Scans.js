@@ -62,6 +62,8 @@ const Scans = () => {
         }
     };
 
+
+
     const sendScanRequest = async () => {
         try {
             const response = await axios.post(BASE_URL + '/v2/scan', {
@@ -132,10 +134,45 @@ const Scans = () => {
         setIsFilterModalVisible(false);
     };
 
-    const applyFilters = (filters) => {
-        // Handle applying filters (e.g., send a request with filters)
-        console.log('Applied filters:', filters);
-    };
+   const applyFilters = async (filters) => {
+    try {
+        // Convert camelCase to snake_case
+        const snakeCaseFilters = {};
+        Object.keys(filters).forEach(key => {
+            const snakeCaseKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+            snakeCaseFilters[snakeCaseKey] = filters[key];
+        });
+
+        const filteredFilters = Object.fromEntries(
+            Object.entries(snakeCaseFilters).filter(([key, value]) => value !== '')
+        );
+
+        const response = await axios.get(BASE_URL + '/v2/results', {
+            headers: {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+            },
+            params: filteredFilters, // From GPT
+        });
+
+        if (response.data.status === 'success' && response.data.result && response.data.result.scans) {
+            const formattedResults = response.data.result.scans.map(scan => ({
+                key: scan.scan_id,
+                uuid: scan.scan_id,
+                scan_owner: scan.scan_owner,
+                scan_name: scan.scan_name,
+                ip: scan.host,
+                datetime: scan.scan_datetime,
+            }));
+
+            setScanResults(formattedResults);
+        }
+    } catch (error) {
+        console.error('Error fetching filtered scan results:', error);
+    }
+
+    setIsFilterModalVisible(false);
+};
 
     return (
         <>
