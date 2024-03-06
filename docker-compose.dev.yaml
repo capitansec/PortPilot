@@ -89,83 +89,82 @@ services:
     networks:
       - default
 
-  pp-api:
-    container_name: "ppilot-api"
-    ports:
-      - "8000:8000"
-    build:
-      context: Api
-      dockerfile: Dockerfile
-    image: ppilot-api:latest
-    environment:
-      RABBITMQ_PORT: ${RABBITMQ_PORT}
-      RABBITMQ_HOST: ${RABBITMQ_HOST} 
-      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
-      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
-      RABBITMQ_QUEUE_NAME: ${RABBITMQ_QUEUE_NAME}
-      ELASTICSEARCH_HOST: ${ELASTICSEARCH_HOST}
-      ELASTICSEARCH_PORT: ${ELASTICSEARCH_PORT}
-      ELASTICSEARCH_USERNAME: ${ELASTICSEARCH_USERNAME}
-      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASSWORD}
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      DB_NAME: ${DB_NAME}
-      DB_DRIVER: ${DB_DRIVER}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      REDIS_HOST: ${REDIS_HOST}
-      REDIS_PORT: ${REDIS_PORT}
-      LOG_FILE_PATH: ${LOG_FILE_PATH}
-      ALGORITHM: ${ALGORITHM}
-      SECRET_KEY: ${SECRET_KEY}
-      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}
-    depends_on:
-      - redis
-      - postgres
-    networks:
-      - default
+#  pp-api:
+#    container_name: "ppilot-api"
+#    ports:
+#      - "8000:8000"
+#    build:
+#      context: Api
+#      dockerfile: Dockerfile
+#    image: ppilot-api:latest
+#    environment:
+#      RABBITMQ_PORT: ${RABBITMQ_PORT}
+#      RABBITMQ_HOST: ${RABBITMQ_HOST}
+#      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+#      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+#      RABBITMQ_QUEUE_NAME: ${RABBITMQ_QUEUE_NAME}
+#      ELASTICSEARCH_HOST: ${ELASTICSEARCH_HOST}
+#      ELASTICSEARCH_PORT: ${ELASTICSEARCH_PORT}
+#      ELASTICSEARCH_USERNAME: ${ELASTICSEARCH_USERNAME}
+#      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASSWORD}
+#      DB_HOST: ${DB_HOST}
+#      DB_PORT: ${DB_PORT}
+#      DB_NAME: ${DB_NAME}
+#      DB_DRIVER: ${DB_DRIVER}
+#      DB_USERNAME: ${DB_USERNAME}
+#      DB_PASSWORD: ${DB_PASSWORD}
+#      REDIS_HOST: ${REDIS_HOST}
+#      REDIS_PORT: ${REDIS_PORT}
+#      LOG_FILE_PATH: ${LOG_FILE_PATH}
+#      ALGORITHM: ${ALGORITHM}
+#      SECRET_KEY: ${SECRET_KEY}
+#      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}
+#    depends_on:
+#      - redis
+#      - postgres
+#    networks:
+#      - default
 
-  pp-worker:
-    build:
-      context: Worker
-      dockerfile: Dockerfile
-    image: ppilot-worker:latest
-    environment:
-      RABBITMQ_PORT: ${RABBITMQ_PORT}
-      RABBITMQ_HOST: ${RABBITMQ_HOST}
-      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
-      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
-      RABBITMQ_QUEUE_NAME: ${RABBITMQ_QUEUE_NAME}
-      ELASTICSEARCH_HOST: ${ELASTICSEARCH_HOST}
-      ELASTICSEARCH_PORT: ${ELASTICSEARCH_PORT}
-      ELASTICSEARCH_USERNAME: ${ELASTICSEARCH_USERNAME}
-      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASSWORD}
-      PYTHONUNBUFFERED: 1
-    depends_on:
-      - elasticsearch
-      - rabbitmq
-    networks:
-      - default
+#  pp-worker:
+#    build:
+#      context: Worker
+#      dockerfile: Dockerfile
+#    image: ppilot-worker:latest
+#    environment:
+#      RABBITMQ_PORT: ${RABBITMQ_PORT}
+#      RABBITMQ_HOST: ${RABBITMQ_HOST}
+#      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+#      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+#      RABBITMQ_QUEUE_NAME: ${RABBITMQ_QUEUE_NAME}
+#      ELASTICSEARCH_HOST: ${ELASTICSEARCH_HOST}
+#      ELASTICSEARCH_PORT: ${ELASTICSEARCH_PORT}
+#      ELASTICSEARCH_USERNAME: ${ELASTICSEARCH_USERNAME}
+#      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASSWORD}
+#      PYTHONUNBUFFERED: 1
+#    depends_on:
+#      - elasticsearch
+#      - rabbitmq
+#    networks:
+#      - default
 
-  panel:
-
-    stdin_open: true
-    build:
-      args:
-        - REACT_APP_BASE_URL=${REACT_APP_BASE_URL}
-      context: Panel
-      dockerfile: Dockerfile
-    image: pp-panel:latest
-    ports:
-      - "8080:3000"
-    environment:
-      REACT_APP_BASE_URL: ${REACT_APP_BASE_URL}
-    depends_on:
-      - pp-api
-      - redis
-      - postgres
-    networks:
-      - default
+#  panel:
+#    stdin_open: true
+#    build:
+#      args:
+#        - REACT_APP_BASE_URL=${REACT_APP_BASE_URL}
+#      context: Panel
+#      dockerfile: Dockerfile
+#    image: pp-panel:latest
+#    ports:
+#      - "8080:3000"
+#    environment:
+#      REACT_APP_BASE_URL: ${REACT_APP_BASE_URL}
+#    depends_on:
+#      - pp-api
+#      - redis
+#      - postgres
+#    networks:
+#      - default
 
 
 volumes:

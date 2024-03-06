@@ -5,6 +5,8 @@ import Register from './RegisterForm'
 import Dashboard from './Dashboard';
 import { Provider, useSelector, useDispatch } from 'react-redux';
 import { createStore } from 'redux';
+import ScanDetails from "./components/dashboard/ScanViewer";
+import ScanViewer from "./components/dashboard/ScanViewer";
 
 const initialState = {
   isLoggedIn: false,
@@ -57,6 +59,7 @@ const AppBody = () => {
     <Router>
       <div>
         <Routes>
+          <Route path="/scans/:uuid" element={<ScanViewer />} />
           <Route
             path="/"
             element={isLoggedIn ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
