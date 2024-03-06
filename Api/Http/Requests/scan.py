@@ -32,14 +32,5 @@ class ScanModel(BaseModel):
 
 
 class ScanRequestModel(BaseModel):
-    scan_id: str = str(uuid.uuid4())
     scan_name: str
-    scan_owner: str
     target: IPvAnyAddress
-    request_datetime: datetime
-
-    @field_validator("target")
-    def validate_target(cls, value):
-        if isinstance(value, IPvAnyAddress):
-            return str(value)
-        return value

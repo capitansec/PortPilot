@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import './LoginForm.css'
-import './App.css'
-import './Dashboard.css'
-import './components/dashboard/custom-antd.less'
+import './LoginForm.css';
+import './App.css';
+import './Dashboard.css';
+import './ScanWindow.css';
+import './components/dashboard/custom-antd.less';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

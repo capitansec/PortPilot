@@ -10,6 +10,10 @@
 
 }
 
+#scan-btn {
+    background-color: rgba(253, 57, 57, 0.72);
+}
+
 .wrapper h1 {
     font-size: 36px;
     text-align: center;
