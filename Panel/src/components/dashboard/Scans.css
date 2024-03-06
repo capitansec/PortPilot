@@ -9,24 +9,38 @@
     background-color: rgba(0, 0, 0, 0.2); /* Yoğun opaklık */
     backdrop-filter: blur(20px); /* Blur efekti */
     padding: 20px;
-  }
+}
 
- h2, .label-box {
-    color: azure;
-  }
+
 
 #ip-box {
     width: 50%;
 }
 
-.input-box{
+.input-box {
     float: right;
 }
 
 .table-content {
-    background-color: rgba(240, 248, 255, 0.5); 
+    background-color: rgba(240, 248, 255, 0.5);
     margin-top: 5%;
-    border-radius: 20px; 
-    overflow: hidden; 
-    opacity: 0.5; 
+    border-radius: 20px;
+    overflow: hidden;
+    opacity: 0.5;
+}
+
+.bas {
+    background-color: white;
+    padding: 30px;
+    opacity: 80%;
+    border-radius: 20px;
+}
+
+.bas li {
+    margin-left: 15px;
+}
+
+.bas {
+    padding-left: 30px;
+    padding-right: 30px;
 }

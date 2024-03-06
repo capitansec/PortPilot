@@ -7,6 +7,7 @@ import FilterModal from "./FilterModal";
 import { Button, Table, message } from 'antd';
 import axios from 'axios';
 import {PlusCircleFilled, PlusCircleOutlined, ReloadOutlined, SearchOutlined} from "@ant-design/icons";
+import {Link, useNavigate} from "react-router-dom";
 
 const pageSize = 7;
 
@@ -19,7 +20,7 @@ const Scans = () => {
         scanName: '',
         ipAddress: ''
     });
-
+    const navigate = useNavigate();
 
 
     const showModal = () => {
@@ -48,7 +49,7 @@ const Scans = () => {
             if (response.data.status === 'success' && response.data.result && response.data.result.scans) {
                 const formattedResults = response.data.result.scans.map(scan => ({
                     key: scan.scan_id,
-                    uuid: scan.scan_id,
+                    uuid: <Link to={`/scans/${scan.scan_id}`}>{scan.scan_id}</Link>,
                     scan_owner: scan.scan_owner,
                     scan_name: scan.scan_name,
                     ip: scan.host,
@@ -158,7 +159,7 @@ const Scans = () => {
         if (response.data.status === 'success' && response.data.result && response.data.result.scans) {
             const formattedResults = response.data.result.scans.map(scan => ({
                 key: scan.scan_id,
-                uuid: scan.scan_id,
+                uuid: <Link to={`/scans/${scan.scan_id}`}>{scan.scan_id}</Link>,
                 scan_owner: scan.scan_owner,
                 scan_name: scan.scan_name,
                 ip: scan.host,
