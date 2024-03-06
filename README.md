@@ -20,7 +20,12 @@
 <p>
 PortPilot is a cutting-edge port scanning tool designed specifically for offensive security disciplines such as bug bounty hunting and penetration testing. Its unique distributed architecture allows scalable agents to be deployed globally, providing unparalleled scanning capabilities.
 Getting started with PortPilot is as easy as installing the agent and entering the RabbitMQ connection information. The newly added agent is dynamically integrated into the system, ensuring seamless functionality.<p>
-<p align="center"><img src="./Docs/record.gif" width="700" /></p>
+<p align="center">
+  <video width="700" controls>
+    <source src="./Docs/record.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</p>
 <p>For ease of use, PortPilot comes with a web UI. But that's not all - it also supports API calls, offering flexibility in how you interact with the tool. To keep track of your scan results, you can conveniently use Grafana. In short, PortPilot is an indispensable tool for those seeking to augment their offensive security capabilities.
 
 
