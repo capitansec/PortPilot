@@ -22,12 +22,14 @@ pipeline {
         }
         stage('Build and Push Image') {
             steps {
-                script {
-                    //docker.withRegistry('https://ghcr.io/', DOCKER_CREDENTIALS_ID) {
-                        //def imageTag = "ghcr.io/fevzisahinler/sysflowrunner:${env.DATE_TAG}-${env.BUILD_ID}"
-                        //def dockerImage = docker.build(imageTag)
-                        //dockerImage.push()
-                    //}
+                script { // Etiket eklemek için "L:{" kullanabiliriz.
+                    L:{
+                        // docker.withRegistry('https://ghcr.io/', DOCKER_CREDENTIALS_ID) {
+                        //     def imageTag = "ghcr.io/fevzisahinler/sysflowrunner:${env.DATE_TAG}-${env.BUILD_ID}"
+                        //     def dockerImage = docker.build(imageTag)
+                        //     dockerImage.push()
+                        // }
+                    }
                 }
             }
         }
